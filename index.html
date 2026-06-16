@@ -146,6 +146,76 @@
         .stat-block {
             min-width: 80px;
         }
+
+        /* ── Hero Mobile: título em evidência ── */
+        @media (max-width: 1023px) {
+            /* Título hero bem maior no mobile */
+            .hero-title {
+                font-size: clamp(2.4rem, 9vw, 3.2rem);
+                line-height: 1.15;
+                font-weight: 700;
+                letter-spacing: -0.02em;
+            }
+
+            /* Hero no mobile: imagem em cima, texto em baixo */
+            .hero-mobile-layout {
+                display: flex;
+                flex-direction: column;
+                gap: 0;
+            }
+
+            /* Imagem vem primeiro no mobile, ocupa largura total */
+            .hero-image-col {
+                order: -1;          /* imagem acima do texto */
+                width: 100%;
+            }
+
+            .hero-image-col .hero-img-wrap {
+                position: relative;
+                width: 100%;
+                aspect-ratio: 4 / 3;   /* ratio paisagem no mobile = rosto fica visível */
+                overflow: hidden;
+                border-radius: 0.5rem;
+                border: none;
+                box-shadow: none;
+            }
+
+            .hero-image-col .hero-img-wrap img {
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+                object-position: center top; /* garante que o rosto aparece */
+                image-rendering: -webkit-optimize-contrast;
+                image-rendering: crisp-edges;
+            }
+
+            /* Remove o gradiente que cobria a foto */
+            .hero-image-col .hero-img-wrap .hero-gradient {
+                display: none !important;
+            }
+
+            /* Padding extra no topo da seção (header fixo) */
+            .hero-section {
+                padding-top: 7rem;
+                padding-bottom: 3rem;
+            }
+
+            /* Texto do hero com padding generoso */
+            .hero-text-col {
+                padding-top: 2rem;
+                padding-bottom: 1rem;
+            }
+        }
+
+        /* Desktop mantido igual */
+        @media (min-width: 1024px) {
+            .hero-title {
+                font-size: 48px;
+                line-height: 56px;
+                letter-spacing: -0.02em;
+                font-weight: 700;
+            }
+        }
     </style>
 </head>
 <body class="bg-pearl text-on-surface font-body-md overflow-x-hidden">
@@ -169,33 +239,45 @@
 </header>
 <main>
 <!-- Hero Section -->
-<section class="relative pt-32 lg:pt-40 overflow-hidden" id="inicio">
-<div class="max-w-container-max mx-auto px-gutter grid lg:grid-cols-12 gap-12 items-center">
-<div class="lg:col-span-7 z-10" data-aos="fade-right">
-<h1 class="font-display-lg-mobile md:text-display-lg text-primary mb-6">
-                        Segurança e Dignidade na sua <span class="italic font-normal shimmer-word">Aposentadoria</span>.
-                    </h1>
-<p class="text-body-lg text-on-surface-variant mb-8 max-w-2xl">
-                        Especialista em Planejamento Previdenciário. Protegemos seus direitos para garantir o melhor benefício para o seu futuro. Atendimento humanizado e rigor técnico.
-                    </p>
-<div class="flex flex-col sm:flex-row gap-4">
-<a class="inline-flex items-center justify-center bg-primary text-on-primary px-8 py-4 rounded-lg font-label-md transition-soft hover:shadow-xl hover:translate-y-[-2px]" href="https://wa.me/5522999951219" target="_blank">
-<span class="material-symbols-outlined mr-2">verified_user</span>
-                            Inicie seu Planejamento
-                        </a>
-<a class="inline-flex items-center justify-center border border-secondary text-secondary px-8 py-4 rounded-lg font-label-md transition-soft hover:bg-secondary-fixed/20" href="#especialidades">
-                            Ver Especialidades
-                        </a>
-</div>
-</div>
-<div class="lg:col-span-5 relative">
-<div class="relative w-full aspect-[3/4] overflow-hidden rounded-xl shadow-2xl border-4 border-white">
-<img alt="Dra. Thaís Gomes" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDF0xqtG4R9si3wA7WidHyuj8onyMjW6CVRedRc2nkyDSc0QG181zE5BHLUyZm_iWo5Ba3vHNSZLhfi10k1GBWVoLqR3hA-IczTxRkf1E6CzUxwzVoR5MLZNSmK2xxkTdxXEdAwDq0-W_kzy7vNiTIOsIoRbU7NFstM2E-lqrJDmxpmIoxTYNL_3jPM5aRO09hipD-rGjMBL7-jRdbQoUW567O8ZhgInQHnoV2Y3arjHL7MbsKVSZBtLC3djyvNmQIaaPMOf-L8qAw">
-<div class="absolute inset-0 hero-gradient lg:hidden"></div>
-</div>
-<!-- Decorative Element -->
-<div class="absolute -bottom-6 -left-6 w-24 h-24 bg-secondary-container/30 rounded-full blur-3xl -z-10"></div>
-</div>
+<section class="relative hero-section pt-32 lg:pt-40 overflow-hidden" id="inicio">
+<div class="max-w-container-max mx-auto px-gutter hero-mobile-layout lg:grid lg:grid-cols-12 gap-12 lg:items-center">
+
+    <!-- Coluna de texto -->
+    <div class="hero-text-col lg:col-span-7 z-10">
+        <h1 class="hero-title font-display-lg text-primary mb-6">
+            Segurança e Dignidade na sua <span class="italic font-normal shimmer-word">Aposentadoria</span>.
+        </h1>
+        <p class="text-body-lg text-on-surface-variant mb-8 max-w-2xl">
+            Especialista em Planejamento Previdenciário. Protegemos seus direitos para garantir o melhor benefício para o seu futuro. Atendimento humanizado e rigor técnico.
+        </p>
+        <div class="flex flex-col sm:flex-row gap-4">
+            <a class="inline-flex items-center justify-center bg-primary text-on-primary px-8 py-4 rounded-lg font-label-md transition-soft hover:shadow-xl hover:translate-y-[-2px]" href="https://wa.me/5522999951219" target="_blank">
+                <span class="material-symbols-outlined mr-2">verified_user</span>
+                Inicie seu Planejamento
+            </a>
+            <a class="inline-flex items-center justify-center border border-secondary text-secondary px-8 py-4 rounded-lg font-label-md transition-soft hover:bg-secondary-fixed/20" href="#especialidades">
+                Ver Especialidades
+            </a>
+        </div>
+    </div>
+
+    <!-- Coluna da imagem -->
+    <div class="hero-image-col lg:col-span-5 relative">
+        <div class="hero-img-wrap relative w-full aspect-[3/4] overflow-hidden rounded-xl shadow-2xl border-4 border-white">
+            <img
+                alt="Dra. Thaís Gomes"
+                class="w-full h-full object-cover object-top"
+                src="https://lh3.googleusercontent.com/aida-public/AB6AXuDF0xqtG4R9si3wA7WidHyuj8onyMjW6CVRedRc2nkyDSc0QG181zE5BHLUyZm_iWo5Ba3vHNSZLhfi10k1GBWVoLqR3hA-IczTxRkf1E6CzUxwzVoR5MLZNSmK2xxkTdxXEdAwDq0-W_kzy7vNiTIOsIoRbU7NFstM2E-lqrJDmxpmIoxTYNL_3jPM5aRO09hipD-rGjMBL7-jRdbQoUW567O8ZhgInQHnoV2Y3arjHL7MbsKVSZBtLC3djyvNmQIaaPMOf-L8qAw"
+                loading="eager"
+                decoding="sync"
+            >
+            <!-- gradiente suave apenas no desktop -->
+            <div class="hidden lg:block absolute inset-0 hero-gradient"></div>
+        </div>
+        <!-- Decorative Element -->
+        <div class="absolute -bottom-6 -left-6 w-24 h-24 bg-secondary-container/30 rounded-full blur-3xl -z-10"></div>
+    </div>
+
 </div>
 </section>
 <!-- Especialidades Section -->
