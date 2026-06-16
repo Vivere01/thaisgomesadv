@@ -164,20 +164,22 @@
                 gap: 0;
             }
 
-            /* Imagem vem primeiro no mobile, ocupa largura total */
+            /* Imagem vem primeiro no mobile, menor e centralizada */
             .hero-image-col {
                 order: -1;          /* imagem acima do texto */
                 width: 100%;
+                display: flex;
+                justify-content: center;
             }
 
             .hero-image-col .hero-img-wrap {
                 position: relative;
-                width: 100%;
-                aspect-ratio: 4 / 3;   /* ratio paisagem no mobile = rosto fica visível */
+                width: 72%;             /* um pouco menor que a largura total */
+                aspect-ratio: 9 / 16;  /* vertical 9:16 como solicitado */
                 overflow: hidden;
-                border-radius: 0.5rem;
-                border: none;
-                box-shadow: none;
+                border-radius: 0.75rem;
+                border: 3px solid #fff;
+                box-shadow: 0 8px 32px rgba(76,0,17,0.15);
             }
 
             .hero-image-col .hero-img-wrap img {
