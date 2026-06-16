@@ -105,6 +105,47 @@
         .bg-pearl { background-color: #fbf9f4; }
         .transition-soft { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
         .hero-gradient { background: linear-gradient(to bottom, rgba(251, 249, 244, 0.1), rgba(251, 249, 244, 1)); }
+
+        /* ── Shimmer na palavra Aposentadoria ── */
+        .shimmer-word {
+            position: relative;
+            display: inline-block;
+            overflow: hidden;
+        }
+        .shimmer-word::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -120%;
+            width: 60%;
+            height: 100%;
+            background: linear-gradient(
+                105deg,
+                transparent 30%,
+                rgba(255, 255, 255, 0.55) 50%,
+                transparent 70%
+            );
+            border-radius: 4px;
+            pointer-events: none;
+            animation: shimmer-slide 3.5s ease-in-out infinite;
+        }
+        @keyframes shimmer-slide {
+            0%   { left: -120%; opacity: 0; }
+            10%  { opacity: 1; }
+            60%  { left: 130%; opacity: 1; }
+            61%  { opacity: 0; }
+            100% { left: 130%; opacity: 0; }
+        }
+
+        /* ── Contador animado ── */
+        .stat-counter {
+            display: inline-block;
+            font-variant-numeric: tabular-nums;
+        }
+        /* Garante que os contadores não causem layout shift no mobile */
+        .stat-block {
+            min-width: 80px;
+        }
     </style>
 </head>
 <body class="bg-pearl text-on-surface font-body-md overflow-x-hidden">
@@ -132,7 +173,7 @@
 <div class="max-w-container-max mx-auto px-gutter grid lg:grid-cols-12 gap-12 items-center">
 <div class="lg:col-span-7 z-10" data-aos="fade-right">
 <h1 class="font-display-lg-mobile md:text-display-lg text-primary mb-6">
-                        Segurança e Dignidade na sua <span class="italic font-normal">Aposentadoria</span>.
+                        Segurança e Dignidade na sua <span class="italic font-normal shimmer-word">Aposentadoria</span>.
                     </h1>
 <p class="text-body-lg text-on-surface-variant mb-8 max-w-2xl">
                         Especialista em Planejamento Previdenciário. Protegemos seus direitos para garantir o melhor benefício para o seu futuro. Atendimento humanizado e rigor técnico.
@@ -236,13 +277,17 @@
 <div class="space-y-6 text-body-lg text-on-surface-variant">
 <p class="">Com anos de atuação exclusiva na área previdenciária, a <strong>Dra. Thaís Gomes</strong> consolidou sua carreira através de uma abordagem técnica e profundamente humanizada.</p>
 <p class="">Acreditamos que cada processo representa uma vida, uma história e o sustento de uma família. Por isso, nosso compromisso vai além do peticionamento; buscamos a segurança social que cada brasileiro merece.</p>
-<div class="grid grid-cols-2 gap-4 pt-4">
-<div class="border-l-4 border-secondary pl-4">
-<span class="block text-display-lg-mobile font-display-lg text-primary">10+</span>
+<div class="grid grid-cols-2 gap-4 pt-4" id="stats-section">
+<div class="border-l-4 border-secondary pl-4 stat-block">
+<span class="block text-display-lg-mobile font-display-lg text-primary">
+    <span class="stat-counter" data-target="10" data-suffix="+" id="counter-anos">0+</span>
+</span>
 <span class="text-label-md uppercase tracking-wider">Anos de Experiência</span>
 </div>
-<div class="border-l-4 border-secondary pl-4">
-<span class="block text-display-lg-mobile font-display-lg text-primary">95%</span>
+<div class="border-l-4 border-secondary pl-4 stat-block">
+<span class="block text-display-lg-mobile font-display-lg text-primary">
+    <span class="stat-counter" data-target="95" data-suffix="%" id="counter-taxa">0%</span>
+</span>
 <span class="text-label-md uppercase tracking-wider">Taxa de Sucesso</span>
 </div>
 </div>
@@ -387,14 +432,14 @@
 <span class="max-w-0 overflow-hidden group-hover:max-w-xs transition-all duration-500 font-label-md whitespace-nowrap">Fale com a Dra. Thaís</span>
 </a>
 <script>
-        // Form interaction
+        /* ── Formulário ── */
         const form = document.querySelector('form');
         form.addEventListener('submit', (e) => {
             e.preventDefault();
             alert('Mensagem enviada com sucesso! Em breve entraremos em contato.');
         });
 
-        // Sticky Header Effect
+        /* ── Sticky Header ── */
         window.addEventListener('scroll', () => {
             const header = document.querySelector('header');
             if (window.scrollY > 50) {
@@ -403,6 +448,46 @@
                 header.classList.remove('shadow-md');
             }
         });
+
+        /* ── Contador animado (0 → target) ── */
+        function animateCounter(el) {
+            const target  = parseInt(el.dataset.target, 10);
+            const suffix  = el.dataset.suffix || '';
+            const duration = 1800; // ms
+            const startTime = performance.now();
+
+            // Easing: ease-out quadratic
+            function easeOut(t) { return 1 - (1 - t) * (1 - t); }
+
+            function tick(now) {
+                const elapsed  = now - startTime;
+                const progress = Math.min(elapsed / duration, 1);
+                const current  = Math.round(easeOut(progress) * target);
+                el.textContent  = current + suffix;
+                if (progress < 1) requestAnimationFrame(tick);
+            }
+
+            requestAnimationFrame(tick);
+        }
+
+        // Dispara quando o bloco de stats entra na viewport
+        const statsSection = document.getElementById('stats-section');
+        let countersStarted = false;
+
+        const counterObserver = new IntersectionObserver(
+            (entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting && !countersStarted) {
+                        countersStarted = true;
+                        document.querySelectorAll('.stat-counter').forEach(animateCounter);
+                        counterObserver.disconnect();
+                    }
+                });
+            },
+            { threshold: 0.4 } // dispara quando 40 % do elemento está visível
+        );
+
+        if (statsSection) counterObserver.observe(statsSection);
     </script>
 
 
